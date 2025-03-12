@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int                @id @default(autoincrement())
+  password          String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  verified          Boolean            @default(false)
+  admin             Boolean            @default(false)
+  login             String             @unique
+  caloriesGoal      Float              @default(2000)
+  waterGoal         Float              @default(2000)
+  DailyFoodRecords  DailyFoodRecord[]
+  DailySuccessRates DailySuccessRate[]
+  WaterRecords      WaterRecord[]
+}
+
+model WaterRecord {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  date      DateTime
+  amount    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model FoodData {
+  id              Int               @id @default(autoincrement())
+  name            String
+  category        String
+  cholesterol     Float?
+  fiber           Float?
+  protein         Float
+  calories        Float
+  sugar           Float
+  fat             Float
+  magnesium       Float?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  calcium         Float?
+  iron            Float?
+  sodium          Float?
+  DailyFoodRecord DailyFoodRecord[]
+  RecipeFoodData  RecipeFoodData[]
+  Recipe          Recipe[]          @relation("FoodDataToRecipe")
+}
+
+model DailyFoodRecord {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  date      DateTime
+  foodId    Int
+  amount    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  recipeId  Int?     @default(-1)
+  FoodData  FoodData @relation(fields: [foodId], references: [id])
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model DailySuccessRate {
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  date             DateTime
+  successFoodRate  Float
+  successWaterRate Float
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  User             User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Recipe {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  creator        String
+  RecipeFoodData RecipeFoodData[]
+  FoodData       FoodData[]       @relation("FoodDataToRecipe")
+}
+
+model RecipeFoodData {
+  recipeId Int
+  foodId   Int
+  amount   Float
+  FoodData FoodData @relation(fields: [foodId], references: [id])
+  Recipe   Recipe   @relation(fields: [recipeId], references: [id])
+
+  @@id([recipeId, foodId])
+}

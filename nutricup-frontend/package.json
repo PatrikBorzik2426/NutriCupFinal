@@ -1,0 +1,29 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "prod": "node .output/server/index.mjs",
+    "docker": "docker build -t patrikborzik/nutricup-frontend:latest . && docker push patrikborzik/nutricup-frontend:latest"
+  },
+  "dependencies": {
+    "@nuxtjs/tailwindcss": "^6.12.2",
+    "@vite-pwa/nuxt": "^0.10.6",
+    "axios": "^1.7.9",
+    "nuxt": "^3.15.1",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwindcss-animated": "^1.1.2",
+    "vue": "latest",
+    "vue-router": "latest"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
+  }
+}

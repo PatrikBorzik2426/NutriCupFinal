@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "FoodData" ADD COLUMN     "calcium" DOUBLE PRECISION,
+ADD COLUMN     "iron" DOUBLE PRECISION,
+ADD COLUMN     "sodium" DOUBLE PRECISION;

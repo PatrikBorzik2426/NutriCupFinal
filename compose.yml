@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # Nuxt.js Application Service
+  nuxt:
+    image: patrikborzik/nutricup-frontend:latest
+    container_name: nuxt-app
+    ports:
+      - "3000:3000"
+    networks:
+      tavern_network:
+        ipv4_address: 192.168.1.13
+
+  # NestJS Application Service
+  nestjs:
+    image: patrikborzik/nutricup-backend:latest
+    container_name: nestjs-app
+    ports:
+      - "4444:4444"
+    networks:
+      tavern_network:
+        ipv4_address: 192.168.1.14
+
+networks:
+  tavern_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
